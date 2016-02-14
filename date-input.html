@@ -51,11 +51,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
     <date-validator id="validator"></date-validator>
 
-    <span aria-hidden id="monthLabel" hidden>Month</span>
     <span aria-hidden id="yearLabel" hidden>Year</span>
+    <span aria-hidden id="monthLabel" hidden>Month</span>
+    <span aria-hidden id="dayLabel" hidden>Day</span>
 
     <div class="container">
       <input is="iron-input"
+             id="yearInput"
+             aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'yearLabel')]]"
+             required$="[[required]]"
+             maxlength="4"
+             bind-value="{{year}}"
+             placeholder="YYYY"
+             allowed-pattern="[0-9]"
+             prevent-invalid-input
+             autocomplete="cc-exp-year"
+             type="tel"
+             disabled$="[[disabled]]"
+             invalid="{{invalid}}"
+             autofocus$="[[autofocus]]"
+             inputmode$="[[inputmode]]"
+             placeholder$="[[placeholder]]"
+             readonly$="[[readonly]]">
+      <span>/</span>
+      <input is="iron-input"
+          id="monthInput"
           aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'monthLabel')]]"
           required$="[[required]]"
           maxlength="2"
@@ -73,22 +93,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           readonly$="[[readonly]]">
       <span>/</span>
       <input is="iron-input"
-          id="expirationYear"
-          aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'yearLabel')]]"
-          required$="[[required]]"
-          maxlength="2"
-          bind-value="{{year}}"
-          placeholder="YY"
-          allowed-pattern="[0-9]"
-          prevent-invalid-input
-          autocomplete="cc-exp-year"
-          type="tel"
-          disabled$="[[disabled]]"
-          invalid="{{invalid}}"
-          autofocus$="[[autofocus]]"
-          inputmode$="[[inputmode]]"
-          placeholder$="[[placeholder]]"
-          readonly$="[[readonly]]">
+             id="dayInput"
+             aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'dayLabel')]]"
+             required$="[[required]]"
+             maxlength="2"
+             bind-value="{{day}}"
+             placeholder="DD"
+             allowed-pattern="[0-9]"
+             prevent-invalid-input
+             autocomplete="cc-exp-day"
+             type="tel"
+             disabled$="[[disabled]]"
+             invalid="{{invalid}}"
+             autofocus$="[[autofocus]]"
+             inputmode$="[[inputmode]]"
+             placeholder$="[[placeholder]]"
+             readonly$="[[readonly]]">
     </div>
   </template>
 
@@ -100,7 +120,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     is: 'date-input',
 
     behaviors: [
-      Polymer.IronValidatableBehavior
+      Polymer.IronValidatableBehavior,
+      Polymer.IronFormElementBehavior
     ],
 
     properties: {
@@ -110,6 +131,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       required: {
         type: Boolean,
         value: false
+      },
+
+
+      day: {
+        type: String
       },
 
       /**
@@ -146,22 +172,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     },
 
     observers: [
-      '_computeDate(month,year)'
+      '_computeDate(day,month,year)'
     ],
 
-    _computeDate: function(month, year) {
+    _computeDate: function(day, month, year) {
       // Months are 0-11.
-      this.date = {month: month, year: year};
+      this.date = {
+        year: year,
+        month: month,
+        day: day
+      };
       this.fire('dateChanged', this.date);
       // Advance cursor to year after month entry
-      if (month.length === 2) {
-        this.$.expirationYear.focus();
+      if (year.length === 4) {
+        if(month.length == 2) {
+          this.$.dayInput.focus();
+        }else{
+          this.$.monthInput.focus();
+        }
       }
     },
 
     validate: function() {
       // Empty, non-required input is valid.
-      if (!this.required && this.month == '' && this.year == '') {
+      if (!this.required &&
+              this.day == '' && this.month == '' && this.year == '') {
         return true;
       }
       this.invalid = !this.$.validator.validate(this.date);

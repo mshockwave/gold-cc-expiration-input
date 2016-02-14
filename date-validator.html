@@ -25,12 +25,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       if (!date)
         return false;
 
-      if (date.month > 12 || date.month < 1)
+      if (date.month > 12 || date.month < 1 || date.day < 1 || date.day > 31)
         return false;
 
-      var then = new Date ('20' + date.year, date.month);
-      var now = new Date();
-      return (then > now);
+      if(date.month == 2){
+        if(date.year % 4 == 0 || date.year % 400 == 0){
+          //29 days
+          if(date.day > 29) return false;
+        }else{
+          //28 days
+          if(date.day > 28 ) return false;
+        }
+      }else{
+        switch(date.month){
+          //30 days
+          case 4:
+          case 6:
+          case 9:
+          case 11:
+            if(date.day > 30) return false;
+            break;
+        }
+      }
+
+      return true;
     }
 
   });

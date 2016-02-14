@@ -1,24 +1,26 @@
 {
-  "name": "gold-cc-expiration-input",
+  "name": "gold-date-input",
   "version": "1.1.1",
-  "description": "A validating input for a credit card expiration date",
+  "description": "A validating input for YYYY-MM-DD date",
   "authors": [
-    "The Polymer Authors"
+    "The Polymer Authors",
+    "Bekket McClane"
   ],
   "keywords": [
     "web-components",
     "polymer",
     "gold",
-    "input"
+    "input",
+    "date"
   ],
-  "main": "gold-cc-expiration-input.html",
+  "main": "date-input.html",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "git://github.com/PolymerElements/gold-cc-expiration-input.git"
+    "url": "git://github.com/mshockwave/gold-cc-expiration-input.git"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/PolymerElements/gold-cc-expiration-input",
+  "homepage": "https://github.com/mshockwave/gold-cc-expiration-input",
   "ignore": [],
   "dependencies": {
     "iron-validator-behavior": "PolymerElements/iron-validator-behavior#^1.0.0",
