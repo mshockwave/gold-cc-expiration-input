@@ -183,7 +183,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         day: day
       };
       this.fire('dateChanged', this.date);
-      // Advance cursor to year after month entry
+      this.set('value', this.year + '-' + this.month + '-' + this.day);
+
+      // Advance cursor to month after year entry
       if (year.length === 4) {
         if(month.length == 2) {
           this.$.dayInput.focus();
